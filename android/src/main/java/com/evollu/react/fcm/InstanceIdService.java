@@ -7,9 +7,12 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import io.intercom.android.sdk.push.IntercomPushClient;
+
 public class InstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = "InstanceIdService";
+    private final IntercomPushClient intercomPushClient = new IntercomPushClient();
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -21,6 +24,7 @@ public class InstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        intercomPushClient.sendTokenToIntercom(getApplication(), refreshedToken);
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
         // Broadcast refreshed token
